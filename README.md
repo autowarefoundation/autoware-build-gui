@@ -50,12 +50,6 @@ To run or develop the Autoware Build GUI, you'll need to have both Rust and Node
      sudo apt install nodejs
      ```
 
-   - For macOS:
-
-     ```bash
-     brew install node
-     ```
-
 3. Verify your Node.js installation with:
 
    ```bash
