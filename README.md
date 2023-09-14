@@ -16,6 +16,9 @@ Autoware Build GUI is a Tauri / NextJS application designed to simplify the proc
 
 ## Dependencies
 
+
+
+
 To run or develop the Autoware Build GUI, you'll need to have both Rust and Node.js installed on your system.
 
 ### Installing Rust
@@ -59,10 +62,10 @@ To run or develop the Autoware Build GUI, you'll need to have both Rust and Node
    node --version
    ```
 
-4. It's also recommended to install `npm` (Node Package Manager) if it's not included:
+4. It's also recommended to install `pnpm` as it's not included:
 
    ```bash
-   npm --version
+   npm install -g pnpm
    ```
 
 Once Rust and Node.js are set up, you can proceed with the [Installation](#installation) steps mentioned above.
@@ -104,6 +107,12 @@ If you're interested in developing additional features or want to run the projec
 ## Usage
 
 For a comprehensive guide on how to use the Autoware Build GUI, please refer to our [demo video](https://youtu.be/RJ5LPpSIs8U). In essence, the process involves:
+
+
+
+https://github.com/leo-drive/autoware-build-gui/assets/36904941/8df717b6-a273-4dd3-9017-a5635d8780ad.mp4
+
+
 
 1. Launching the app.
 2. Setting the path to the Autoware folder.
