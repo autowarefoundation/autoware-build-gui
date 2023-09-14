@@ -128,7 +128,7 @@ We welcome contributions from the community! If you're interested in enhancing t
 
 ## Author
 
-**[Your Name]** - Creator and maintainer of Autoware Build GUI.
+**Khalil Selyan** - Creator and maintainer of Autoware Build GUI.
 
 - **GitHub**: <https://github.com/khalilselyan>
 - **LinkedIn**: <https://linkedin.com/in/khalilselyan>
