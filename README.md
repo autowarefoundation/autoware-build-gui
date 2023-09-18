@@ -100,11 +100,13 @@ If you're interested in developing additional features or want to run the projec
 
 ## Usage
 
-For a comprehensive guide on how to use the Autoware Build GUI, please refer to our [demo video](https://youtu.be/RJ5LPpSIs8U). In essence, the process involves:
+For a comprehensive guide on how to use the Autoware Build GUI, please refer to our demo video. In essence, the process involves:
 
 
 
-https://github.com/leo-drive/autoware-build-gui/assets/36904941/8df717b6-a273-4dd3-9017-a5635d8780ad.mp4
+## **Demo Video**
+
+[![Autoware Build GUI Demo](https://github-production-user-asset-6210df.s3.amazonaws.com/36904941/268611728-f8e35215-7bed-4c74-bb66-fd025304982b.png)](https://www.youtube.com/watch?v=RJ5LPpSIs8U&ab_channel=KhalilSelyan)
 
 
 
