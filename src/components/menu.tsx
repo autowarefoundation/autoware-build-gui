@@ -13,10 +13,10 @@ export function Menu() {
     <WindowTitlebar
       controlsOrder="right"
       // everything to the right of the window controls
-      className="ml-20 flex h-8 items-center bg-background text-white"
-      windowControlsProps={{ platform: "windows", justify: true }}
+      className="flex h-8 cursor-grab select-none items-center justify-end bg-background"
+      windowControlsProps={{ platform: "windows", className: "w-fit" }}
     >
-      <h1 className="ml-auto select-none font-sans text-lg font-semibold">
+      <h1 className="pointer-events-none ml-auto font-sans text-lg font-semibold">
         Autoware Build GUI
       </h1>
     </WindowTitlebar>
