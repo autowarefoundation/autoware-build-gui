@@ -6,11 +6,27 @@ type Packages = {
   status: boolean
 }
 
+type FlagsType = {
+  [key: string]: string
+}
+
 export const packageNamesAtom = atom<Packages[]>([])
 export const buildLogsAtom = atom<string[]>([])
 export const autowareFolderPathAtom = atomWithStorage<string | null>(
-  "autowareFolderPath",
+  "autowareFolderPathBuildGUI",
   null
+)
+export const colconBuildTypeAtom = atom<{
+  label: string
+  value: string
+}>({
+  label: "",
+  value: "",
+})
+
+export const editedFlagsAtom = atomWithStorage<FlagsType>(
+  "editedFlagsBuildGUI",
+  {}
 )
 
 export const minimalSetupPlanningSimulatorAtom = atom([
@@ -276,3 +292,172 @@ export const minimalSetupAWSimAtom = atom([
   "vls_description",
   "localization_error_monitor",
 ])
+
+export const colconFlags = [
+  {
+    label: "--build-base",
+    placeholder: "Enter build base path",
+    multipleValues: false,
+  },
+  {
+    label: "--install-base",
+    placeholder: "Enter install base path",
+    multipleValues: false,
+  },
+  { label: "--merge-install", placeholder: "", multipleValues: false },
+  {
+    label: "--install-layout",
+    placeholder: "Enter layout (merged/isolated)",
+    multipleValues: false,
+  },
+  //   { label: "--symlink-install", placeholder: "", multipleValues: false },
+  { label: "--cmake-args", placeholder: "ARG [ARG …]", multipleValues: true },
+  { label: "--cmake-clean-cache", placeholder: "", multipleValues: false },
+  { label: "--cmake-clean-first", placeholder: "", multipleValues: false },
+  { label: "--cmake-force-configure", placeholder: "", multipleValues: false },
+  {
+    label: "--cmake-target",
+    placeholder: "Enter CMake target",
+    multipleValues: false,
+  },
+  {
+    label: "--cmake-target-skip-unavailable",
+    placeholder: "",
+    multipleValues: false,
+  },
+  {
+    label: "--catkin-cmake-args",
+    placeholder: "ARG [ARG …]",
+    multipleValues: true,
+  },
+  {
+    label: "--ament-cmake-args",
+    placeholder: "ARG [ARG …]",
+    multipleValues: true,
+  },
+  {
+    label: "--catkin-skip-building-tests",
+    placeholder: "",
+    multipleValues: false,
+  },
+  {
+    label: "--catkin-skip-building-install",
+    placeholder: "",
+    multipleValues: false,
+  },
+  {
+    label: "--event-handlers",
+    placeholder: "NAME [NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--executor",
+    placeholder: "Enter executor (sequential/parallel)",
+    multipleValues: false,
+  },
+  {
+    label: "--parallel-workers",
+    placeholder: "Enter number of workers",
+    multipleValues: false,
+  },
+  { label: "--paths", placeholder: "PATH [PATH …]", multipleValues: true },
+  { label: "--base-paths", placeholder: "PATH [PATH …]", multipleValues: true },
+  { label: "--metas", placeholder: "PATH [PATH …]", multipleValues: true },
+  { label: "--ignore-user-meta", placeholder: "", multipleValues: false },
+  {
+    label: "--packages-ignore",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-ignore-regex",
+    placeholder: "Enter regex pattern",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-above",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-above-and-dependencies",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-above-depth",
+    placeholder: "Enter depth and package names",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-select-by-dep",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-skip-by-dep",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-skip-up-to",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-select-build-failed",
+    placeholder: "",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-skip-build-finished",
+    placeholder: "",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-select-test-failures",
+    placeholder: "",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-skip-test-passed",
+    placeholder: "",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-select",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-skip",
+    placeholder: "PKG_NAME [PKG_NAME …]",
+    multipleValues: true,
+  },
+  {
+    label: "--packages-select-regex",
+    placeholder: "Enter regex pattern",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-skip-regex",
+    placeholder: "Enter regex pattern",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-start",
+    placeholder: "Enter package name",
+    multipleValues: false,
+  },
+  {
+    label: "--packages-end",
+    placeholder: "Enter package name",
+    multipleValues: false,
+  },
+  {
+    label: "--mixin-files",
+    placeholder: "PATH [PATH …]",
+    multipleValues: true,
+  },
+  { label: "--mixin", placeholder: "NAME [NAME …]", multipleValues: true },
+]

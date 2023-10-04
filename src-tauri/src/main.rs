@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use std::collections::HashMap;
 use std::thread;
 use tauri::{Manager, Window};
 
@@ -37,12 +38,12 @@ async fn get_package_names(path: String, window: Window) -> Result<Vec<String>, 
     });
 
     // Await the task and get the result
-    let meow = Ok(handle
+    let task = Ok(handle
         .await
         .map_err(|e| format!("Error: {:?}", e))?
         .map_err(|e| format!("Error: {:?}", e))?);
 
-    return meow;
+    return task;
 }
 
 // save the config file
@@ -58,14 +59,22 @@ fn build_selected_packages(
     selected_packages: Vec<String>,
     window: Window,
     autoware_path: String,
+    build_type: String,
+    user_edited_flags: HashMap<String, String>, // Add this parameter
 ) -> Result<String, String> {
     thread::spawn(move || {
-        match build_manager::run_build(selected_packages, window, autoware_path) {
+        match build_manager::run_build(
+            selected_packages,
+            window,
+            autoware_path,
+            build_type,
+            user_edited_flags,
+        ) {
             Ok(_) => Ok("Built Successfully".to_string()),
             Err(err) => Err(format!("Build failed: {}", err)),
         }
     });
-    Ok("Command Ran".to_string())
+    Ok("Build Started".to_string())
 }
 
 #[tauri::command]
@@ -114,6 +123,7 @@ fn main() {
             save_config_file,
             build_selected_packages,
             cancel_build,
+            build_manager::update_autoware_workspace
         ])
         .setup(move |app| {
             let app_for_async = app.app_handle().clone();

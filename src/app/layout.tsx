@@ -26,7 +26,8 @@ export default function MyApp({ children }: ExamplesLayoutProps) {
                 className={cn(
                   "h-screen overflow-auto border-t bg-background pb-8",
                   // "scrollbar-none",
-                  "scrollbar scrollbar-track-transparent scrollbar-thumb-accent scrollbar-thumb-rounded-md"
+                  "scrollbar scrollbar-track-transparent scrollbar-thumb-accent scrollbar-thumb-rounded-md",
+                  "select-none"
                 )}
               >
                 {children}
