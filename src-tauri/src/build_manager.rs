@@ -1,4 +1,5 @@
 use once_cell::sync::Lazy;
+use std::collections::HashMap;
 use std::fs;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
@@ -107,16 +108,37 @@ pub async fn install_ros_packages(path: String) -> Result<(), String> {
     Ok(())
 }
 
+// Extract and format the flags from userEditedFlagsAtom
+fn format_flags_from_atom(user_edited_flags: &HashMap<String, String>) -> String {
+    if user_edited_flags.is_empty() {
+        return String::new(); // Return an empty string if no flags are present
+    }
+
+    user_edited_flags
+        .iter()
+        .map(|(key, value)| {
+            if value.is_empty() {
+                format!("{}", key)
+            } else {
+                format!("{} {}", key, value)
+            }
+        })
+        .collect::<Vec<String>>()
+        .join(" ")
+}
+
 pub fn run_build(
     selected_packages: Vec<String>,
     window: tauri::Window,
     autoware_path: String,
+    build_type: String,
+    user_edited_flags: HashMap<String, String>, // Add this parameter
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Emitting a "build_started" event
 
     let cloned_path = autoware_path.clone();
 
-    if let Err(e) = window.emit("build_started", "meow") {
+    if let Err(e) = window.emit("build_started", "") {
         eprintln!("Failed to emit build_started: {}", e);
     }
 
@@ -130,15 +152,31 @@ pub fn run_build(
     let selected_packages_str = selected_packages.join(" ");
     // if selected_packages_str contains 'build_all_packages', then we build all packages with a different command that doesn't use --packages-up-to
     // else we build only the selected packages with the --packages-up-to flag
+    let flags_str = format_flags_from_atom(&user_edited_flags);
 
-    let build_all_command = format!(
-        "source /opt/ros/humble/setup.bash && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release"
-    );
+    let build_all_command = if flags_str.is_empty() {
+        format!(
+            "source /opt/ros/humble/setup.bash && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
+            build_type
+        )
+    } else {
+        format!(
+            "source /opt/ros/humble/setup.bash && colcon build {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
+            flags_str, build_type
+        )
+    };
 
-    let build_command = format!(
-        "source /opt/ros/humble/setup.bash && colcon build --packages-up-to {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release",
-        selected_packages_str
-    );
+    let build_command = if flags_str.is_empty() {
+        format!(
+            "source /opt/ros/humble/setup.bash && colcon build --packages-up-to {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
+            selected_packages_str, build_type
+        )
+    } else {
+        format!(
+            "source /opt/ros/humble/setup.bash && colcon build --packages-up-to {} {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
+            selected_packages_str, flags_str, build_type
+        )
+    };
 
     let mut child = std::process::Command::new("bash")
         .current_dir(cloned_path)
@@ -166,7 +204,9 @@ pub fn run_build(
 
     let window1 = window.clone();
     let window2 = window.clone();
+    let window3 = window.clone();
     let window4 = window.clone();
+
     thread::spawn(move || {
         for line in stdout.lines() {
             match line {
@@ -225,6 +265,11 @@ pub fn run_build(
                         ) {
                             eprintln!("Failed to emit build_progress: {}", e);
                         }
+
+                        // We send to build_log that the build is finished
+                        if let Err(e) = window4.emit("build_log", "Build Finished") {
+                            eprintln!("Failed to emit build_log: {}", e);
+                        }
                     }
                 }
                 Err(e) => eprintln!("Failed to read line from stdout: {}", e),
@@ -232,7 +277,6 @@ pub fn run_build(
         }
     });
 
-    let window3 = window.clone();
     thread::spawn(move || {
         for line in stderr.lines() {
             match line {
@@ -251,14 +295,6 @@ pub fn run_build(
     let mut global_child = BUILD_PROCESS.lock().unwrap();
     *global_child = Some(child);
 
-    // let status = child.wait()?;
-
-    // if status.success() {
-    //     println!("Build Successful");
-    // } else {
-    //     println!("Build Failed");
-    // }
-
     Ok(())
 }
 
@@ -273,4 +309,144 @@ pub fn cancel_build() {
 
     // Clear the global reference
     *global_child = None;
+}
+
+#[tauri::command(async)]
+pub async fn update_autoware_workspace(path: String) -> Result<String, String> {
+    use std::process::Command;
+
+    // Get the name of the current branch
+    let current_branch_output = Command::new("git")
+        .current_dir(&path)
+        .arg("rev-parse")
+        .arg("--abbrev-ref")
+        .arg("HEAD")
+        .output()
+        .expect("Failed to execute command");
+
+    if !current_branch_output.status.success() {
+        println!(
+            "git rev-parse output {}",
+            String::from_utf8_lossy(&current_branch_output.stderr)
+        );
+        return Ok(String::from_utf8_lossy(&current_branch_output.stderr).to_string());
+    }
+
+    let current_branch = String::from_utf8_lossy(&current_branch_output.stdout)
+        .trim()
+        .to_string();
+
+    println!("Current branch: {}", current_branch);
+
+    // Get the remote of the current branch
+    let remote_output = Command::new("git")
+        .current_dir(&path)
+        .arg("config")
+        .arg(format!("branch.{}.remote", current_branch))
+        .output()
+        .expect("Failed to execute command");
+
+    if !remote_output.status.success() {
+        println!(
+            "git config output {}",
+            String::from_utf8_lossy(&remote_output.stderr)
+        );
+        return Ok(String::from_utf8_lossy(&remote_output.stderr).to_string());
+    }
+
+    let remote = String::from_utf8_lossy(&remote_output.stdout)
+        .trim()
+        .to_string();
+
+    println!("Remote: {}", remote);
+
+    // git pull <remote> <current_branch>
+    let pull_output = Command::new("bash")
+        .current_dir(&path)
+        .arg("-c")
+        .arg(format!("git pull {} {}", remote, current_branch))
+        .output()
+        .expect("Failed to execute command");
+
+    if !pull_output.status.success() {
+        println!(
+            "git pull output {}",
+            String::from_utf8_lossy(&pull_output.stderr)
+        );
+        return Ok(String::from_utf8_lossy(&pull_output.stderr).to_string());
+    }
+
+    // print the output
+    println!(
+        "git pull output {}",
+        String::from_utf8_lossy(&pull_output.stdout)
+    );
+
+    // vcs import src < autoware.repos
+    let output = Command::new("bash")
+        .current_dir(path.clone())
+        .arg("-c")
+        .arg("vcs import src < autoware.repos")
+        .output()
+        .expect("Failed to execute command");
+
+    if !output.status.success() {
+        println!(
+            "vcs import output {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        return Ok(String::from_utf8_lossy(&output.stderr).to_string());
+    }
+
+    // print the output
+    println!(
+        "vcs import output {}",
+        String::from_utf8_lossy(&output.stdout)
+    );
+
+    // vcs pull src
+    let output = Command::new("bash")
+        .current_dir(path.clone())
+        .arg("-c")
+        .arg("vcs pull src")
+        .output()
+        .expect("Failed to execute command");
+
+    if !output.status.success() {
+        println!(
+            "vcs pull output {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        return Ok(String::from_utf8_lossy(&output.stderr).to_string());
+    }
+
+    // print the output
+    println!(
+        "vcs pull output {}",
+        String::from_utf8_lossy(&output.stdout)
+    );
+
+    // source /opt/ros/humble/setup.bash && rosdep update && rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
+    let output = Command::new("bash")
+        .current_dir(path.clone())
+        .arg("-c")
+        .arg("source /opt/ros/humble/setup.bash && rosdep update && rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO")
+        .output()
+        .expect("Failed to execute command");
+
+    if !output.status.success() {
+        println!(
+            "rosdep install output {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        return Ok(String::from_utf8_lossy(&output.stderr).to_string());
+    }
+
+    // print the output
+    println!(
+        "rosdep install output {}",
+        String::from_utf8_lossy(&output.stdout)
+    );
+
+    Ok("Update Successful".to_string())
 }
