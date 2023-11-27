@@ -49,6 +49,13 @@ async fn get_package_names(src_path: &str) -> Vec<String> {
     while let Some(entry) = it.next() {
         match entry {
             Ok(e) => {
+                // if file is COLCON_IGNORE, skip the directory
+                if e.file_name().to_string_lossy() == "COLCON_IGNORE" {
+                    if let Some(..) = e.depth().checked_sub(1) {
+                        it.skip_current_dir();
+                    }
+                }
+
                 if e.file_name().to_string_lossy() == "package.xml" {
                     xml_files.push(e.path().to_string_lossy().into_owned());
                     if let Some(..) = e.depth().checked_sub(1) {
@@ -57,7 +64,7 @@ async fn get_package_names(src_path: &str) -> Vec<String> {
                 }
             }
             Err(_) => {
-                // Handle the error here if needed
+                eprintln!("Error while walking directory");
             }
         }
     }

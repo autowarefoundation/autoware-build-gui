@@ -123,7 +123,8 @@ fn main() {
             save_config_file,
             build_selected_packages,
             cancel_build,
-            build_manager::update_autoware_workspace
+            build_manager::update_autoware_workspace,
+            build_manager::get_and_build_calibration_tools
         ])
         .setup(move |app| {
             let app_for_async = app.app_handle().clone();

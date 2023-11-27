@@ -75,18 +75,33 @@ export function Menu() {
         Update Workspace
       </Button>
 
-      {updatingWorkspace && (
-        <Dialog modal open={updatingWorkspace}>
-          <DialogContent>
-            <div className="flex flex-col items-center justify-center">
-              <Loader2 className="h-16 w-16 animate-spin" />
-              <div className="mt-4 font-mono text-xl font-semibold">
-                Updating Workspace
-              </div>
+      <Dialog modal open={updatingWorkspace}>
+        <DialogContent>
+          <div className="flex flex-col items-center justify-center">
+            <Loader2 className="h-16 w-16 animate-spin" />
+            <div className="mt-4 font-mono text-xl font-semibold">
+              Updating Workspace
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Button
+        variant="ghost"
+        onClick={async () => {
+          const res = await invoke("get_and_build_calibration_tools", {
+            payload: { path: autowarePath },
+          });
+
+          if (res) {
+            console.log("Calibration tools added successfully");
+          } else {
+            console.log("Failed to add calibration tools");
+          }
+        }}
+      >
+        Add Calibration Tools
+      </Button>
 
       <h1 className="pointer-events-none ml-auto font-sans text-lg font-semibold">
         Autoware Build GUI

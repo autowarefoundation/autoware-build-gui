@@ -5,6 +5,7 @@ import { useAtom, useAtomValue } from "jotai";
 
 import { cn } from "@/lib/utils";
 import {
+  calibrationToolsPackagesAtom,
   minimalSetupAWSimAtom,
   minimalSetupLoggingSimulatorAtom,
   minimalSetupPlanningSimulatorAtom,
@@ -29,6 +30,7 @@ const LeftPane = () => {
   const minimalPlanningSetup = useAtomValue(minimalSetupPlanningSimulatorAtom);
   const minimalSimulatorSetup = useAtomValue(minimalSetupLoggingSimulatorAtom);
   const minimalAWSimulatorSetup = useAtomValue(minimalSetupAWSimAtom);
+  const calibrationToolsSetup = useAtomValue(calibrationToolsPackagesAtom);
 
   const [search, setSearch] = React.useState("");
 
@@ -63,7 +65,7 @@ const LeftPane = () => {
   };
 
   const [selectedMinimalSetup, setSelectedMinimalSetup] = useState<
-    "PlanningSim" | "LoggingSim" | "None" | "AWSim"
+    "PlanningSim" | "LoggingSim" | "None" | "AWSim" | "CalibrationTools"
   >("None");
 
   const reFilteredPackages =
@@ -78,6 +80,10 @@ const LeftPane = () => {
       : selectedMinimalSetup === "AWSim"
       ? filteredPackages.filter((packageItem) =>
           minimalAWSimulatorSetup.includes(packageItem.name)
+        )
+      : selectedMinimalSetup === "CalibrationTools"
+      ? filteredPackages.filter((packageItem) =>
+          calibrationToolsSetup.includes(packageItem.name)
         )
       : filteredPackages;
 
@@ -138,6 +144,20 @@ const LeftPane = () => {
               setSearch("");
 
               break;
+            case "CalibrationTools":
+              const newPackages5 = [...packages];
+              newPackages5.forEach((packageItem) => {
+                if (calibrationToolsSetup.includes(packageItem.name)) {
+                  packageItem.status = true;
+                } else {
+                  packageItem.status = false;
+                }
+              });
+              setPackages(newPackages5);
+              setSelectedMinimalSetup("CalibrationTools");
+              setSearch("");
+
+              break;
             case "None":
               const newPackages3 = [...packages];
               newPackages3.forEach((packageItem) => {
@@ -169,6 +189,9 @@ const LeftPane = () => {
               Logging Simulator Minimal Setup
             </SelectItem>
             <SelectItem value="AWSim">AWSim Minimal Setup</SelectItem>
+            <SelectItem value="CalibrationTools">
+              Calibration Tools Setup
+            </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
