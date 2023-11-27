@@ -1,9 +1,11 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { UpdateIcon } from "@radix-ui/react-icons";
 import { GithubIcon, HomeIcon } from "lucide-react";
 
 import { Icons } from "./icons";
+import { Button } from "./ui/button";
 import {
   DialogContent,
   DialogDescription,
@@ -12,8 +14,15 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 
+const checkForUpdates = async () => {
+  const { open } = await import("@tauri-apps/plugin-shell");
+
+  return open(
+    "https://github.com/leo-drive/autoware-build-gui/releases/latest"
+  );
+};
+
 export function AboutDialog() {
-  const [updateText, setUpdateText] = useState("");
   const [version, setVersion] = useState("");
   const [name, setName] = useState("");
   const [tauriVersion, setTauriVersion] = useState("");
@@ -42,7 +51,7 @@ export function AboutDialog() {
     <DialogContent className="overflow-clip pb-2">
       <DialogHeader className="flex items-center text-center">
         <div className="bg-background">
-          <Icons.logo className="invert dark:invert-0" />
+          <Icons.logo className="fill-current text-foreground" />
         </div>
 
         <DialogTitle className="flex flex-col items-center gap-2 pt-2">
@@ -75,8 +84,8 @@ export function AboutDialog() {
         Tauri version: {tauriVersion}
       </span>
 
-      <DialogFooter className="flex items-center justify-center border-t pt-2 text-slate-400">
-        <div className="flex flex-row gap-2">
+      <DialogFooter className="flex flex-row items-center border-t pt-2 text-slate-400">
+        <div className="mr-auto flex flex-row gap-2">
           <HomeIcon
             className="h-5 w-5 cursor-pointer transition hover:text-slate-300"
             onClick={() => open("https://autoware.org/")}
@@ -89,14 +98,14 @@ export function AboutDialog() {
           />
         </div>
 
-        {/* <Button
+        <Button
           type="submit"
           variant="outline"
           className="h-7 gap-1"
-          onClick={() => setUpdateText("You have the latest version.")}
+          onClick={async () => await checkForUpdates()}
         >
           <UpdateIcon /> Check for Updates
-        </Button> */}
+        </Button>
       </DialogFooter>
     </DialogContent>
   );
