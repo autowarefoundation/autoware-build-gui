@@ -330,8 +330,13 @@ const RightPane = () => {
         </Button>
         <Button
           disabled={
-            (buildLogs.length > 0 &&
-              !buildLogs.some((log) => log.includes("Summary"))) ||
+            (buildLogs.length === 1 &&
+              !buildLogs.some((log) => log.includes("Build logs cleared"))) ||
+            (buildLogs.length > 1 &&
+              !buildLogs.some(
+                (log) =>
+                  log.includes("Build Failed") || log.includes("Build Finished")
+              )) ||
             packages.every((packageItem) => !packageItem.status) ||
             buildType.value === ""
           }

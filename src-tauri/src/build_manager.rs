@@ -282,7 +282,8 @@ pub fn run_build(
             match line {
                 Ok(line) => {
                     println!("stderr: {}", line);
-                    if let Err(e) = window3.emit("build_log", line) {
+                    if let Err(e) = window3.emit("build_log", "Build Failed : ".to_string() + &line)
+                    {
                         eprintln!("Failed to emit build_log: {}", e);
                     }
                 }
@@ -449,4 +450,46 @@ pub async fn update_autoware_workspace(path: String) -> Result<String, String> {
     );
 
     Ok("Update Successful".to_string())
+}
+
+#[tauri::command]
+pub async fn get_and_build_calibration_tools(path: String) -> Result<(), String> {
+    let cloned_path = path.clone();
+    let path = Path::new(&cloned_path);
+    // if the directory is empty then we clone the repositories
+    let mut output = std::process::Command::new("bash")
+            .current_dir(path)
+            .arg("-c")
+            .arg("wget https://raw.githubusercontent.com/tier4/CalibrationTools/tier4/universe/calibration_tools.repos && vcs import src < calibration_tools.repos")
+            .spawn()
+            .expect("Failed to spawn child process");
+
+    let status = output.wait().expect("Failed to wait on child process");
+    if status.success() {
+        println!("Cloning Successful");
+    } else {
+        println!("Cloning Failed");
+    }
+
+    // Check if the src directory is empty
+
+    let mut dir = std::fs::read_dir(cloned_path.clone()).expect("read_dir call failed");
+    if dir.next().is_none() {
+        return Err("Failed to clone repositories: src directory is empty.".to_string());
+    }
+
+    // install ros packages
+    let output = Command::new("bash")
+        .current_dir(path)
+        .arg("-c")
+        .arg("source /opt/ros/humble/setup.bash && rosdep update && rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO")
+        .output()
+        .await
+        .expect("Failed to execute command");
+
+    if !output.status.success() {
+        return Err(String::from_utf8_lossy(&output.stderr).to_string());
+    }
+
+    Ok(())
 }

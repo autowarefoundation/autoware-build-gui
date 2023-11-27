@@ -1,33 +1,33 @@
-import { atom } from "jotai"
-import { atomWithStorage } from "jotai/utils"
+import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 type Packages = {
-  name: string
-  status: boolean
-}
+  name: string;
+  status: boolean;
+};
 
 type FlagsType = {
-  [key: string]: string
-}
+  [key: string]: string;
+};
 
-export const packageNamesAtom = atom<Packages[]>([])
-export const buildLogsAtom = atom<string[]>([])
+export const packageNamesAtom = atom<Packages[]>([]);
+export const buildLogsAtom = atom<string[]>([]);
 export const autowareFolderPathAtom = atomWithStorage<string | null>(
   "autowareFolderPathBuildGUI",
   null
-)
+);
 export const colconBuildTypeAtom = atom<{
-  label: string
-  value: string
+  label: string;
+  value: string;
 }>({
   label: "",
   value: "",
-})
+});
 
 export const editedFlagsAtom = atomWithStorage<FlagsType>(
   "editedFlagsBuildGUI",
   {}
-)
+);
 
 export const minimalSetupPlanningSimulatorAtom = atom([
   "bag_time_manager_rviz_plugin",
@@ -108,7 +108,7 @@ export const minimalSetupPlanningSimulatorAtom = atom([
   "costmap_generator",
   "rtc_replayer",
   "path_smoother",
-])
+]);
 
 export const minimalSetupLoggingSimulatorAtom = atom([
   "autoware_auto_perception_rviz_plugin",
@@ -208,7 +208,7 @@ export const minimalSetupLoggingSimulatorAtom = atom([
   "control_validator",
   "crosswalk_traffic_light_estimator",
   "gyro_odometer",
-])
+]);
 
 export const minimalSetupAWSimAtom = atom([
   "autoware_launch",
@@ -291,7 +291,51 @@ export const minimalSetupAWSimAtom = atom([
   "vehicle_velocity_converter",
   "vls_description",
   "localization_error_monitor",
-])
+]);
+
+export const calibrationToolsPackagesAtom = atom([
+  "apriltag_msgs",
+  "apriltag_ros",
+  "calibration_adapter",
+  "camera_calibration",
+  "depth_image_proc",
+  "deviation_estimator",
+  "deviation_evaluator",
+  "estimator_utils",
+  "extrinsic_calibration_client",
+  "extrinsic_calibration_manager",
+  "extrinsic_dummy_calibrator",
+  "extrinsic_ground_plane_calibrator",
+  "extrinsic_interactive_calibrator",
+  "extrinsic_lidar_to_lidar_2d_calibrator",
+  "extrinsic_manual_calibrator",
+  "extrinsic_map_based_calibrator",
+  "extrinsic_mapping_based_calibrator",
+  "extrinsic_reflector_based_calibrator",
+  "extrinsic_tag_based_base_calibrator",
+  "extrinsic_tag_based_calibrator",
+  "image_pipeline",
+  "image_proc",
+  "image_publisher",
+  "image_rotate",
+  "image_view",
+  "intrinsic_camera_calibration",
+  "intrinsic_camera_calibrator",
+  "lidartag",
+  "lidartag_msgs",
+  "parameter_estimator",
+  "pitch_checker",
+  "point_cloud_accumulator",
+  "ros2_numpy",
+  "stereo_image_proc",
+  "stop_accel_evaluator",
+  "tier4_calibration_msgs",
+  "tier4_calibration_pcl_extensions",
+  "tier4_tag_utils",
+  "time_delay_estimator",
+  "tunable_static_tf_broadcaster",
+  "vehicle_cmd_analyzer",
+]);
 
 export const colconFlags = [
   {
@@ -460,4 +504,4 @@ export const colconFlags = [
     multipleValues: true,
   },
   { label: "--mixin", placeholder: "NAME [NAME …]", multipleValues: true },
-]
+];
