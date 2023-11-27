@@ -16,9 +16,6 @@ Autoware Build GUI is a Tauri / NextJS application designed to simplify the proc
 
 ## Dependencies
 
-
-
-
 To run or develop the Autoware Build GUI, you'll need to have both Rust and Node.js installed on your system.
 
 ### Installing Rust
@@ -102,13 +99,9 @@ If you're interested in developing additional features or want to run the projec
 
 For a comprehensive guide on how to use the Autoware Build GUI, please refer to our demo video. In essence, the process involves:
 
-
-
 ## **Demo Video**
 
 [![Autoware Build GUI Demo](https://github-production-user-asset-6210df.s3.amazonaws.com/36904941/268611728-f8e35215-7bed-4c74-bb66-fd025304982b.png)](https://www.youtube.com/watch?v=RJ5LPpSIs8U&ab_channel=KhalilSelyan)
-
-
 
 1. Launching the app.
 2. Setting the path to the Autoware folder.
@@ -119,7 +112,8 @@ If you haven't cloned the packages yet (i.e., no `src` folder exists), the app w
 ## Features
 
 - **Initialization**: Automatically creates an `src` folder and clones necessary packages if they aren't present.
-- **Pre-configured Setups**: Offers minimal setups for AWSIM, Planning Simulator, and Logging Simulator.
+- **Adding Calibration Packages**: Ability to add calibration packages to the project.
+- **Pre-configured Setups**: Offers minimal setups for AWSIM, Planning Simulator, and Logging Simulator and Calibration tools.
 - **Config Management**: Ability to save and load configurations for specific selected packages.
 - **Log Management**: Save build logs for future reference.
 - **Build Process**: Seamlessly build selected packages with a click.
