@@ -1,19 +1,35 @@
-"use client"
+"use client";
 
-import "@/styles/globals.css"
+import "@/styles/globals.css";
 
-import { Provider } from "jotai"
+import { useEffect } from "react";
+import { Provider } from "jotai";
 
-import { cn } from "@/lib/utils"
-import { Menu } from "@/components/menu"
-import { StyleSwitcher } from "@/components/style-switcher"
-import { ThemeProvider } from "@/components/theme-provider"
+import { cn } from "@/lib/utils";
+import { Menu } from "@/components/menu";
+import { StyleSwitcher } from "@/components/style-switcher";
+import { ThemeProvider } from "@/components/theme-provider";
 
 interface ExamplesLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function MyApp({ children }: ExamplesLayoutProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === "r") {
+        e.preventDefault();
+        window.location.reload();
+      } else if (e.ctrlKey && e.key === "q") {
+        e.preventDefault();
+        window.close();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
   return (
     <html lang="en" suppressHydrationWarning className="overflow-clip bg-black">
       <head />
@@ -39,7 +55,7 @@ export default function MyApp({ children }: ExamplesLayoutProps) {
         </Provider>
       </body>
     </html>
-  )
+  );
 }
 
 // export const metadata: Metadata = {
