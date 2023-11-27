@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Autoware Build GUI",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "tauri": {
     "bundle": {
@@ -63,7 +63,7 @@
         "resizable": false,
         "decorations": false,
         "transparent": true,
-        "width": 1200,
+        "width": 800,
         "height": 590,
         "label": "splash",
         "url": "splash.html",
@@ -77,7 +77,7 @@
         "decorations": false,
         "transparent": true,
         "height": 760,
-        "width": 940,
+        "width": 1080,
         "label": "main"
       }
     ]
