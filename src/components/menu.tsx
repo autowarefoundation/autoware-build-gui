@@ -16,6 +16,7 @@ import {
 import { AboutDialog } from "./about-dialog";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { toast } from "./ui/use-toast";
 
 export function Menu() {
   const closeWindow = useCallback(async () => {
@@ -69,6 +70,10 @@ export function Menu() {
           setBuildLogs([]);
 
           setUpdatingWorkspace(false);
+          toast({
+            title: "Workspace Updated",
+            description: "Workspace has been updated successfully",
+          });
         }}
         variant="ghost"
       >
@@ -95,7 +100,18 @@ export function Menu() {
 
           if (res) {
             console.log("Calibration tools added successfully");
+            toast({
+              title: "Workspace Updated",
+              description:
+                "Workspace has been updated successfully with calibration tools",
+            });
           } else {
+            toast({
+              title: "Failed to add calibration tools",
+              description:
+                "Failed to add calibration tools to the workspace. Please check the logs",
+              variant: "destructive",
+            });
             console.log("Failed to add calibration tools");
           }
         }}
