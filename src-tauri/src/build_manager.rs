@@ -453,7 +453,10 @@ pub async fn update_autoware_workspace(path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-pub async fn get_and_build_calibration_tools(path: String) -> Result<(), String> {
+pub async fn get_and_build_calibration_tools(
+    path: String,
+    window: tauri::Window<tauri::Wry>,
+) -> Result<String, String> {
     let cloned_path = path.clone();
     let path = Path::new(&cloned_path);
     // if the directory is empty then we clone the repositories
@@ -461,8 +464,43 @@ pub async fn get_and_build_calibration_tools(path: String) -> Result<(), String>
             .current_dir(path)
             .arg("-c")
             .arg("wget https://raw.githubusercontent.com/tier4/CalibrationTools/tier4/universe/calibration_tools.repos && vcs import src < calibration_tools.repos")
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
             .spawn()
             .expect("Failed to spawn child process");
+
+    let stdout = BufReader::new(output.stdout.take().expect("Failed to capture stdout"));
+    let stderr = BufReader::new(output.stderr.take().expect("Failed to capture stderr"));
+
+    // we send the output to the frontend
+    let window1 = window.clone();
+    std::thread::spawn(move || {
+        for line in stdout.lines() {
+            match line {
+                Ok(line) => {
+                    if let Err(e) = window1.emit("build_log", line) {
+                        eprintln!("Failed to emit build_log: {}", e);
+                    }
+                }
+                Err(e) => eprintln!("Failed to read line from stdout: {}", e),
+            }
+        }
+    });
+
+    let window2 = window.clone();
+
+    std::thread::spawn(move || {
+        for line in stderr.lines() {
+            match line {
+                Ok(line) => {
+                    if let Err(e) = window2.emit("build_log", line) {
+                        eprintln!("Failed to emit build_log: {}", e);
+                    }
+                }
+                Err(e) => eprintln!("Failed to read line from stderr: {}", e),
+            }
+        }
+    });
 
     let status = output.wait().expect("Failed to wait on child process");
     if status.success() {
@@ -491,5 +529,5 @@ pub async fn get_and_build_calibration_tools(path: String) -> Result<(), String>
         return Err(String::from_utf8_lossy(&output.stderr).to_string());
     }
 
-    Ok(())
+    Ok("Cloning and installing Successful".to_string())
 }
