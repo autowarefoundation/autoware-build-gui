@@ -333,10 +333,8 @@ const RightPane = () => {
             (buildLogs.length === 1 &&
               !buildLogs.some((log) => log.includes("Build logs cleared"))) ||
             (buildLogs.length > 1 &&
-              !buildLogs.some(
-                (log) =>
-                  log.includes("Build Failed") || log.includes("Build Finished")
-              )) ||
+              buildLogs[0].includes("Build Started") &&
+              !buildLogs.some((log) => log.includes("Summary"))) ||
             packages.every((packageItem) => !packageItem.status) ||
             buildType.value === ""
           }
