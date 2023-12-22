@@ -17,7 +17,7 @@ Autoware Build GUI is a Tauri / NextJS application designed to simplify the proc
 ## Dependencies
 To run the .deb file directly you will need to first check if these dependencies are installed.
 ```
-sudo apt install libwebkit2gtk-4-1-0 libjavascriptcoregtk-4.1-0 libsoup-3.0-0 libsoup-3.0-common
+sudo apt install libwebkit2gtk-4.1-0 libjavascriptcoregtk-4.1-0 libsoup-3.0-0 libsoup-3.0-common
 ```
 
 To develop the Autoware Build GUI, you'll need to have both Rust and Node.js installed on your system.
