@@ -1,6 +1,9 @@
 name: Raspberry Pi compile
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - deploy/arm64
 
 jobs:
   build:
