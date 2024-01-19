@@ -34,7 +34,7 @@
       },
       "resources": [],
       "shortDescription": "",
-      "targets": "all",
+      "targets": "deb",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
