@@ -15,6 +15,7 @@ import {
 import { Search } from "./SearchBar";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+import { Label } from "./ui/label";
 import {
   Select,
   SelectContent,
@@ -175,7 +176,7 @@ const LeftPane = () => {
         defaultValue="None"
         disabled={packages.length === 0}
       >
-        <SelectTrigger className="w-[16rem]">
+        <SelectTrigger className="w-[20rem]">
           <SelectValue placeholder="Select a minimal setup(optional)" />
         </SelectTrigger>
         <SelectContent>
@@ -197,7 +198,7 @@ const LeftPane = () => {
       </Select>
       <div
         className={cn(
-          "flex min-w-fit max-w-[20rem] flex-col gap-2 overflow-y-auto", // scrollable div
+          "flex w-full max-w-[32rem] flex-col gap-4 overflow-y-auto", // scrollable div
           "h-[50rem] rounded-md border p-2",
           "select-text"
           // filteredPackages.length > 0 ? "rounded-md border p-2" : "opacity-0"
@@ -221,7 +222,7 @@ const LeftPane = () => {
                 setPackages(newPackages);
               }}
             />
-            <label htmlFor={packageItem.name}>{packageItem.name}</label>
+            <Label htmlFor={packageItem.name}>{packageItem.name}</Label>
           </div>
         ))}
       </div>
