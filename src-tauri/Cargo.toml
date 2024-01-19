@@ -1,6 +1,6 @@
 [package]
 name = "autoware-build-gui"
-version = "1.0.2"
+version = "1.0.3"
 description = "A GUI for building Autoware packages"
 authors = ["Khalil Selyan"]
 license = "MIT"
