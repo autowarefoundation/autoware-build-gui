@@ -37,19 +37,19 @@ export function DropDownBuildFlags() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="flex items-center gap-2">
-        <Button variant="outline">
+      <DropdownMenuTrigger asChild className="flex w-full gap-2">
+        <Button variant="outline" className="w-full justify-between capitalize">
           {`Build Flags Added - ${amountOfEditedFlags}`}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         style={{
-          maxHeight: "10rem",
+          maxHeight: "16rem",
           overflow: "auto",
           width: "fit-content",
-          marginRight: "4rem",
-          marginTop: "0.25rem",
+          marginRight: "1rem",
+          marginTop: "0.5rem",
         }}
       >
         {sortedColconFlags.map((flag) => (
