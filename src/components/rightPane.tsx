@@ -9,6 +9,8 @@ import { format } from "date-fns";
 import formatDistance from "date-fns/formatDistance";
 import { useAtom } from "jotai";
 
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import {
   autowareFolderPathAtom,
@@ -18,13 +20,8 @@ import {
   packageNamesAtom,
 } from "@/app/jotai/atoms";
 
+import { DropDownBuildFlags } from "./DropDownBuildFlags";
 import { DropDownBuildType } from "./DropDownBuildType";
-import { Button } from "./ui/button";
-
-const DropDownBuildFlags = dynamic(
-  () => import("./DropDownBuildFlags").then((mod) => mod.DropDownBuildFlags),
-  { ssr: false }
-);
 
 const RightPane = () => {
   const [progress, setProgress] = React.useState(0);
@@ -268,7 +265,7 @@ const RightPane = () => {
   }, []);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4 p-4">
+    <div className="flex w-full flex-col items-center justify-center gap-3 p-4">
       <div className="flex items-center gap-2">
         <Button
           onClick={async () => {
@@ -307,14 +304,15 @@ const RightPane = () => {
           Save Logs
         </Button>
       </div>
-      <span>
+
+      <Label>
         Packages Built {builtPackages}/{totalPackages}
-      </span>
-      <span>Build Time: {buildTime}</span>
+      </Label>
+      <Label>Build Time: {buildTime}</Label>
 
       <Progress value={progress} className="w-[60%]" />
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
         <Button
           disabled={
             (buildLogs.length > 0 &&
@@ -325,6 +323,7 @@ const RightPane = () => {
           onClick={async () => {
             await cancelBuild();
           }}
+          variant={"destructive"}
         >
           Cancel Build
         </Button>
@@ -345,20 +344,20 @@ const RightPane = () => {
           Build
         </Button>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex w-full items-center gap-2">
         <DropDownBuildType />
         <DropDownBuildFlags />
       </div>
 
       {/* Big area to show the build logs */}
       <div
-        className="h-full w-[28rem] max-w-md overflow-x-clip overflow-y-scroll rounded-md border p-2"
+        className="flex h-full w-full flex-col gap-3 overflow-y-scroll rounded-md border p-2"
         ref={textRef}
       >
         {buildLogs.map((log, index) => (
-          <div key={index} className="max-w-md overflow-x-clip">
+          <Label key={index} className="select-text break-words">
             {log}
-          </div>
+          </Label>
         ))}
       </div>
     </div>
