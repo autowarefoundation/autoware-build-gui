@@ -56,8 +56,6 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
-    "dialog": "link:@tauri-apps/api/dialog",
-    "fs": "link:@tauri-apps/api/fs",
     "jotai": "^2.4.1",
     "lucide-react": "^0.263.1",
     "nanoid": "^4.0.2",

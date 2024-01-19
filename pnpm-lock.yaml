@@ -137,12 +137,6 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
-  dialog:
-    specifier: link:@tauri-apps/api/dialog
-    version: link:@tauri-apps/api/dialog
-  fs:
-    specifier: link:@tauri-apps/api/fs
-    version: link:@tauri-apps/api/fs
   jotai:
     specifier: ^2.4.1
     version: 2.4.1(@types/react@18.2.18)(react@18.2.0)
