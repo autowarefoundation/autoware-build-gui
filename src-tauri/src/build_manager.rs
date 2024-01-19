@@ -282,8 +282,7 @@ pub fn run_build(
             match line {
                 Ok(line) => {
                     println!("stderr: {}", line);
-                    if let Err(e) = window3.emit("build_log", "Build Failed : ".to_string() + &line)
-                    {
+                    if let Err(e) = window3.emit("build_log", "stderr: ".to_string() + &line) {
                         eprintln!("Failed to emit build_log: {}", e);
                     }
                 }
