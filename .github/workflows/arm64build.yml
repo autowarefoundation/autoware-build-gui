@@ -38,8 +38,6 @@ jobs:
             cargo install tauri-cli
             # Install pnpm
             npm install -g pnpm
-            # Install framework specific packages with pnpm
-            pnpm install next@latest react@latest react-dom@latest eslint-config-next@latest
             # Install frontend dependencies with pnpm
             pnpm install
             # Build the application
