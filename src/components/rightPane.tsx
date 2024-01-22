@@ -351,7 +351,7 @@ const RightPane = () => {
 
       {/* Big area to show the build logs */}
       <div
-        className="flex h-full w-full flex-col gap-3 overflow-y-scroll rounded-md border p-2"
+        className="flex h-full w-full max-w-full flex-col gap-3 overflow-y-scroll rounded-md border p-2"
         ref={textRef}
       >
         {buildLogs.map((log, index) => (
