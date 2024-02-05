@@ -89,7 +89,7 @@ const LeftPane = () => {
       : filteredPackages;
 
   return (
-    <div className="flex w-full flex-col gap-4 p-4">
+    <div className="flex w-1/2 max-w-[50%] flex-col gap-4 p-4">
       <div className="flex items-center gap-4">
         <Search search={search} setSearch={setSearch} />
         <Button onClick={setAllPackages} variant="secondary">

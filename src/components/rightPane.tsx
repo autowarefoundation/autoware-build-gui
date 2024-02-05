@@ -265,7 +265,7 @@ const RightPane = () => {
   }, []);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-3 p-4">
+    <div className="flex w-1/2 max-w-[50%] flex-col items-center justify-center gap-3 p-4">
       <div className="flex items-center gap-2">
         <Button
           onClick={async () => {
