@@ -15,6 +15,7 @@ import { Progress } from "@/components/ui/progress";
 import {
   autowareFolderPathAtom,
   buildLogsAtom,
+  buildTypeAtom,
   colconBuildTypeAtom,
   editedFlagsAtom,
   packageNamesAtom,
@@ -22,6 +23,7 @@ import {
 
 import { DropDownBuildFlags } from "./DropDownBuildFlags";
 import { DropDownBuildType } from "./DropDownBuildType";
+import { DropDownUptoSelect } from "./DropDownUpto-Select";
 
 const RightPane = () => {
   const [progress, setProgress] = React.useState(0);
@@ -37,6 +39,7 @@ const RightPane = () => {
   );
   const [buildType, _setBuildType] = useAtom(colconBuildTypeAtom);
   const [buildFlags, _setBuildFlags] = useAtom(editedFlagsAtom);
+  const [packageBuildType, setPackageBuildType] = useAtom(buildTypeAtom);
 
   const saveConfig = async () => {
     const hashMap = new Map<string, boolean>();
@@ -145,6 +148,7 @@ const RightPane = () => {
         autowarePath: autowareFolderPath,
         buildType: buildType.value,
         userEditedFlags: buildFlags,
+        packageBuildType: packageBuildType,
       },
     });
 
@@ -344,9 +348,10 @@ const RightPane = () => {
           Build
         </Button>
       </div>
-      <div className="flex w-full items-center gap-2">
+      <div className="grid w-full grid-cols-3 items-center gap-2">
         <DropDownBuildType />
         <DropDownBuildFlags />
+        <DropDownUptoSelect />
       </div>
 
       {/* Big area to show the build logs */}
