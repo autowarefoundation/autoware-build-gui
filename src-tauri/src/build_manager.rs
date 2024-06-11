@@ -132,7 +132,8 @@ pub fn run_build(
     window: tauri::Window,
     autoware_path: String,
     build_type: String,
-    user_edited_flags: HashMap<String, String>, // Add this parameter
+    user_edited_flags: HashMap<String, String>,
+    package_build_type: String,
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Emitting a "build_started" event
 
@@ -168,13 +169,13 @@ pub fn run_build(
 
     let build_command = if flags_str.is_empty() {
         format!(
-            "source /opt/ros/humble/setup.bash && colcon build --packages-up-to {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
-            selected_packages_str, build_type
+            "source /opt/ros/humble/setup.bash && colcon build --packages-{} {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
+            package_build_type,selected_packages_str, build_type
         )
     } else {
         format!(
-            "source /opt/ros/humble/setup.bash && colcon build --packages-up-to {} {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
-            selected_packages_str, flags_str, build_type
+            "source /opt/ros/humble/setup.bash && colcon build --packages-{} {} {} --symlink-install --cmake-args -DCMAKE_BUILD_TYPE={}",
+            package_build_type,selected_packages_str, flags_str, build_type
         )
     };
 

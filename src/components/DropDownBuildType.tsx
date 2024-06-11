@@ -46,10 +46,12 @@ export function DropDownBuildType() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between capitalize"
+          className="w-full justify-between"
         >
-          {selected.label !== "" ? selected.label : "Select build type"}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <div className="w-[75%] truncate text-start text-xs capitalize">
+            {selected.label !== "" ? selected.label : "Select build type"}
+          </div>
+          <ChevronsUpDown className="h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="mr-12 mt-2 w-[200px] p-0">

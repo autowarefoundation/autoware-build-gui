@@ -38,8 +38,11 @@ export function DropDownBuildFlags() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="flex w-full gap-2">
-        <Button variant="outline" className="w-full justify-between capitalize">
-          {`Build Flags Added - ${amountOfEditedFlags}`}
+        <Button
+          variant="outline"
+          className="w-full justify-between text-xs capitalize"
+        >
+          {`Flags - ${amountOfEditedFlags}`}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DropdownMenuTrigger>

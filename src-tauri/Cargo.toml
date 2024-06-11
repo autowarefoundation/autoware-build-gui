@@ -1,6 +1,6 @@
 [package]
 name = "autoware-build-gui"
-version = "1.0.3"
+version = "1.0.4"
 description = "A GUI for building Autoware packages"
 authors = ["Khalil Selyan"]
 license = "MIT"
@@ -27,7 +27,6 @@ rayon = "1.5.0"
 xml-rs = "0.8.0"
 tokio = { version = "1", features = ["full"] }
 once_cell = "1.8"
-
 
 
 [features]

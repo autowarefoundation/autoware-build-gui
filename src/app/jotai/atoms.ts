@@ -10,6 +10,9 @@ type FlagsType = {
   [key: string]: string;
 };
 
+type PackagesType = "up-to" | "above" | "select" | "skip";
+
+export const buildTypeAtom = atom<PackagesType>("up-to");
 export const packageNamesAtom = atom<Packages[]>([]);
 export const buildLogsAtom = atom<string[]>([]);
 export const autowareFolderPathAtom = atomWithStorage<string | null>(

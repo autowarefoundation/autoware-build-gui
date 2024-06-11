@@ -60,7 +60,8 @@ fn build_selected_packages(
     window: Window,
     autoware_path: String,
     build_type: String,
-    user_edited_flags: HashMap<String, String>, // Add this parameter
+    user_edited_flags: HashMap<String, String>,
+    package_build_type: String,
 ) -> Result<String, String> {
     thread::spawn(move || {
         match build_manager::run_build(
@@ -69,6 +70,7 @@ fn build_selected_packages(
             autoware_path,
             build_type,
             user_edited_flags,
+            package_build_type,
         ) {
             Ok(_) => Ok("Built Successfully".to_string()),
             Err(err) => Err(format!("Build failed: {}", err)),
